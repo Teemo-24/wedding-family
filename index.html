@@ -605,25 +605,10 @@
     <!-- 기능 제어 자바스크립트 -->
     <script>
         // 텍스트 선택 방지
-        document.body.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
-
-        // 모바일 브라우저 확대 방지
-        document.addEventListener('touchstart', function(event) {
-            if (event.touches.length > 1) { 
-                event.preventDefault();
-            }
-        }, { passive: false });
-
+        document.body.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+        document.addEventListener('touchstart', function(event) { if (event.touches.length > 1) { event.preventDefault(); } }, { passive: false });
         let lastTouchEnd = 0;
-        document.addEventListener('touchend', function(event) {
-            let now = (new Date()).getTime();
-            if (now - lastTouchEnd <= 300) { 
-                event.preventDefault();
-            }
-            lastTouchEnd = now;
-        }, { passive: false });
+        document.addEventListener('touchend', function(event) { let now = (new Date()).getTime(); if (now - lastTouchEnd <= 300) { event.preventDefault(); } lastTouchEnd = now; }, { passive: false });
 
         // 인트로 화면 클릭 시
         const introScreen = document.getElementById('intro-screen');
@@ -635,74 +620,31 @@
             introScreen.addEventListener('click', function() {
                 this.style.opacity = '0';
                 setTimeout(() => { this.style.display = 'none'; }, 800);
-                
                 if (!isPlaying && bgmAudio) {
                     let playPromise = bgmAudio.play();
                     if (playPromise !== undefined) {
-                        playPromise.then(() => {
-                            isPlaying = true;
-                            if (bgmToggleBtn) bgmToggleBtn.classList.add('playing');
-                        }).catch(error => { console.log("자동 재생 보류됨"); });
+                        playPromise.then(() => { isPlaying = true; if (bgmToggleBtn) bgmToggleBtn.classList.add('playing'); }).catch(error => { console.log("자동 재생 보류됨"); });
                     }
                 }
             });
         }
 
         // 타이핑 애니메이션
-        const nameText = "Yungi & Yeeun";
-        const dateText = "We are getting married!";
-        const nameEl = document.getElementById('type-name');
-        const dateEl = document.getElementById('type-date');
+        const nameText = "Yungi & Yeeun"; const dateText = "We are getting married!";
+        const nameEl = document.getElementById('type-name'); const dateEl = document.getElementById('type-date');
         let nameIndex = 0, dateIndex = 0;
-
-        function typeName() {
-            if (nameIndex < nameText.length) {
-                nameEl.innerHTML += nameText.charAt(nameIndex++);
-                setTimeout(typeName, 100);
-            } else {
-                nameEl.classList.remove('typing-cursor');
-                dateEl.classList.add('typing-cursor');
-                setTimeout(typeDate, 500);
-            }
-        }
-        function typeDate() {
-            if (dateIndex < dateText.length) {
-                dateEl.innerHTML += dateText.charAt(dateIndex++);
-                setTimeout(typeDate, 70);
-            } else {
-                setTimeout(() => { dateEl.classList.remove('typing-cursor'); }, 2000);
-            }
-        }
-        document.addEventListener('DOMContentLoaded', () => {
-            nameEl.classList.add('typing-cursor');
-            setTimeout(typeName, 500);
-            createPetals();
-        });
+        function typeName() { if (nameIndex < nameText.length) { nameEl.innerHTML += nameText.charAt(nameIndex++); setTimeout(typeName, 100); } else { nameEl.classList.remove('typing-cursor'); dateEl.classList.add('typing-cursor'); setTimeout(typeDate, 500); } }
+        function typeDate() { if (dateIndex < dateText.length) { dateEl.innerHTML += dateText.charAt(dateIndex++); setTimeout(typeDate, 70); } else { setTimeout(() => { dateEl.classList.remove('typing-cursor'); }, 2000); } }
+        document.addEventListener('DOMContentLoaded', () => { nameEl.classList.add('typing-cursor'); setTimeout(typeName, 500); createPetals(); });
 
         // 꽃가루 생성
         function createPetals() {
-            const container = document.getElementById('petal-container');
-            if (!container) return;
+            const container = document.getElementById('petal-container'); if (!container) return;
             const petalCount = 15; 
-
             for (let i = 0; i < petalCount; i++) {
-                const petal = document.createElement('div');
-                petal.classList.add('petal');
-                petal.innerHTML = '✿'; 
-                
-                const left = Math.random() * 100; 
-                const size = Math.random() * 6 + 10; 
-                const duration = Math.random() * 6 + 7; 
-                const delay = Math.random() * 5; 
-                const direction = Math.random() > 0.5 ? 1 : -1; 
-                const moveX = Math.random() * 60 * direction; 
-                
-                petal.style.left = `${left}%`;
-                petal.style.fontSize = `${size}px`;
-                petal.style.animationDuration = `${duration}s`;
-                petal.style.animationDelay = `${delay}s`;
-                petal.style.setProperty('--moveX', `${moveX}px`);
-                
+                const petal = document.createElement('div'); petal.classList.add('petal'); petal.innerHTML = '✿'; 
+                const left = Math.random() * 100; const size = Math.random() * 6 + 10; const duration = Math.random() * 6 + 7; const delay = Math.random() * 5; const direction = Math.random() > 0.5 ? 1 : -1; const moveX = Math.random() * 60 * direction; 
+                petal.style.left = `${left}%`; petal.style.fontSize = `${size}px`; petal.style.animationDuration = `${duration}s`; petal.style.animationDelay = `${delay}s`; petal.style.setProperty('--moveX', `${moveX}px`);
                 container.appendChild(petal);
             }
         }
@@ -711,146 +653,90 @@
         if (bgmToggleBtn && bgmAudio) {
             bgmToggleBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
-                if (isPlaying) {
-                    bgmAudio.pause();
-                    bgmToggleBtn.classList.remove('playing');
-                } else {
-                    bgmAudio.play();
-                    bgmToggleBtn.classList.add('playing');
-                }
+                if (isPlaying) { bgmAudio.pause(); bgmToggleBtn.classList.remove('playing'); } 
+                else { bgmAudio.play(); bgmToggleBtn.classList.add('playing'); }
                 isPlaying = !isPlaying;
             });
         }
 
         // 갤러리 라이트박스
-        const lightbox = document.getElementById('lightbox');
-        const lightboxImg = document.getElementById('lightbox-img');
-        const galleryImages = Array.from(document.querySelectorAll('.gallery img'));
-        let currentImgIndex = 0;
-
-        galleryImages.forEach((img, index) => {
-            img.addEventListener('click', () => {
-                currentImgIndex = index;
-                lightboxImg.src = img.src; 
-                lightbox.style.display = 'flex'; 
-            });
-        });
-
-        function changeImage(direction) {
-            currentImgIndex += direction;
-            if (currentImgIndex < 0) { currentImgIndex = galleryImages.length - 1; } 
-            else if (currentImgIndex >= galleryImages.length) { currentImgIndex = 0; }
-            lightboxImg.src = galleryImages[currentImgIndex].src;
-        }
+        const lightbox = document.getElementById('lightbox'); const lightboxImg = document.getElementById('lightbox-img'); const galleryImages = Array.from(document.querySelectorAll('.gallery img')); let currentImgIndex = 0;
+        galleryImages.forEach((img, index) => { img.addEventListener('click', () => { currentImgIndex = index; lightboxImg.src = img.src; lightbox.style.display = 'flex'; }); });
+        function changeImage(direction) { currentImgIndex += direction; if (currentImgIndex < 0) { currentImgIndex = galleryImages.length - 1; } else if (currentImgIndex >= galleryImages.length) { currentImgIndex = 0; } lightboxImg.src = galleryImages[currentImgIndex].src; }
         function closeLightbox() { lightbox.style.display = 'none'; }
-        if (lightbox) {
-            lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
-        }
+        if (lightbox) { lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); }); }
 
         // 카운트다운 타이머
         const weddingDate = new Date("2026-10-03T16:10:00").getTime();
         function updateCountdown() {
-            const now = new Date().getTime();
-            const timeDiff = weddingDate - now;
-            const dDayTextEl = document.getElementById('d-day-text');
-            const countdownBox = document.getElementById('countdown-box');
-
+            const now = new Date().getTime(); const timeDiff = weddingDate - now; const dDayTextEl = document.getElementById('d-day-text'); const countdownBox = document.getElementById('countdown-box');
             if (!dDayTextEl) return;
-
             if (timeDiff > 0) {
-                document.getElementById('d-days').innerText = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-                document.getElementById('d-hours').innerText = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                document.getElementById('d-mins').innerText = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-                document.getElementById('d-secs').innerText = Math.floor((timeDiff % (1000 * 60)) / 1000);
+                document.getElementById('d-days').innerText = Math.floor(timeDiff / (1000 * 60 * 60 * 24)); document.getElementById('d-hours').innerText = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); document.getElementById('d-mins').innerText = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60)); document.getElementById('d-secs').innerText = Math.floor((timeDiff % (1000 * 60)) / 1000);
                 dDayTextEl.innerHTML = `윤기 ♥ 예은 결혼식이 <span class="highlight">${Math.floor(timeDiff / (1000 * 60 * 60 * 24))}일</span> 남았습니다`;
             } else {
-                if(countdownBox) countdownBox.style.display = 'none';
-                const passedDays = Math.floor(Math.abs(timeDiff) / (1000 * 60 * 60 * 24));
+                if(countdownBox) countdownBox.style.display = 'none'; const passedDays = Math.floor(Math.abs(timeDiff) / (1000 * 60 * 60 * 24));
                 dDayTextEl.innerHTML = passedDays === 0 ? `오늘은 윤기 ♥ 예은의 <span class="highlight">결혼식</span> 날입니다!` : `결혼한 지 <span class="highlight">${passedDays}일</span> 되었습니다.`;
             }
         }
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
+        setInterval(updateCountdown, 1000); updateCountdown();
 
-        // 스크롤 애니메이션
+        // 스크롤 애니메이션 & 아코디언 토글
         const observerOptions = { root: null, rootMargin: '0px', threshold: 0.5 };
-        const dateObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { entry.isIntersecting ? entry.target.classList.add('active') : entry.target.classList.remove('active'); });
-        }, observerOptions);
-        const sectionEl = document.getElementById('large-date-section');
-        if (sectionEl) dateObserver.observe(sectionEl);
-
-        const flowerObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('bloom'); 
-                }
-            });
-        }, { threshold: 0.2 }); 
-        const flowerEl = document.getElementById('flower-anim');
-        if (flowerEl) flowerObserver.observe(flowerEl);
-
-        // 아코디언 토글
+        const dateObserver = new IntersectionObserver((entries) => { entries.forEach(entry => { entry.isIntersecting ? entry.target.classList.add('active') : entry.target.classList.remove('active'); }); }, observerOptions);
+        const sectionEl = document.getElementById('large-date-section'); if (sectionEl) dateObserver.observe(sectionEl);
+        const flowerObserver = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('bloom'); } }); }, { threshold: 0.2 }); 
+        const flowerEl = document.getElementById('flower-anim'); if (flowerEl) flowerObserver.observe(flowerEl);
         const accBtns = document.querySelectorAll('.accordion-btn');
-        accBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                this.classList.toggle('active');
-                const content = this.nextElementSibling;
-                if (content.style.maxHeight) {
-                    content.style.maxHeight = null;
-                } else {
-                    content.style.maxHeight = content.scrollHeight + "px";
-                }
-            });
-        });
+        accBtns.forEach(btn => { btn.addEventListener('click', function() { this.classList.toggle('active'); const content = this.nextElementSibling; if (content.style.maxHeight) { content.style.maxHeight = null; } else { content.style.maxHeight = content.scrollHeight + "px"; } }); });
 
         // 복사 기능
-        function copyToClipboard(val, msg) {
-            const t = document.createElement("textarea");
-            document.body.appendChild(t);
-            t.value = val;
-            t.select();
-            document.execCommand('copy');
-            document.body.removeChild(t);
-            alert(msg);
-        }
+        function copyToClipboard(val, msg) { const t = document.createElement("textarea"); document.body.appendChild(t); t.value = val; t.select(); document.execCommand('copy'); document.body.removeChild(t); alert(msg); }
 
-        // 💡 올바른 카카오 자바스크립트 키
+
+        // 💡 [에러 추적용] 카카오톡 공유 기능
         try {
             if (!Kakao.isInitialized()) {
                 Kakao.init('75ecc2283c096d875ba06ce0d12e1f5e'); 
             }
         } catch(e) {
-            console.error("카카오 초기화 에러:", e);
+            alert("카카오 초기화 중 에러 발생: " + e.message); // 초기화 실패 시 알림창 뜸
         }
 
-        // 가족용 주소(yeeun-yungi)
         function shareMessage() {
-            if (!Kakao.isInitialized()) {
-                alert('카카오 공유 기능 설정을 확인해주세요.');
-                return;
-            }
-            Kakao.Share.sendDefault({
-                objectType: 'feed',
-                content: {
-                    title: '윤기 & 예은 결혼합니다 💍',
-                    description: '저희 두 사람의 새로운 시작에 초대합니다.\n2026년 10월 3일 토요일 오후 4시 10분',
-                    imageUrl: 'https://yeeun-yungi.vercel.app/images/main.jpg',
-                    link: {
-                        mobileWebUrl: 'https://yeeun-yungi.vercel.app',
-                        webUrl: 'https://yeeun-yungi.vercel.app',
-                    },
-                },
-                buttons: [
-                    {
-                        title: '모바일 청첩장 보기',
+            try {
+                if (!Kakao.isInitialized()) {
+                    alert('카카오 초기화가 되지 않았습니다. 키값이나 도메인을 다시 확인해주세요.');
+                    return;
+                }
+                
+                // 정상 작동 시 아래 알림창이 뜸
+                alert('버튼 클릭 인식됨! 카카오톡 창을 엽니다.'); 
+
+                Kakao.Share.sendDefault({
+                    objectType: 'feed',
+                    content: {
+                        title: '윤기 & 예은 결혼합니다 💍',
+                        description: '저희 두 사람의 새로운 시작에 초대합니다.\n2026년 10월 3일 토요일 오후 4시 10분',
+                        imageUrl: 'https://yeeun-yungi.vercel.app/images/main.jpg',
                         link: {
                             mobileWebUrl: 'https://yeeun-yungi.vercel.app',
                             webUrl: 'https://yeeun-yungi.vercel.app',
                         },
                     },
-                ],
-            });
+                    buttons: [
+                        {
+                            title: '모바일 청첩장 보기',
+                            link: {
+                                mobileWebUrl: 'https://yeeun-yungi.vercel.app',
+                                webUrl: 'https://yeeun-yungi.vercel.app',
+                            },
+                        },
+                    ],
+                });
+            } catch (error) {
+                alert("공유창 열기 실패 에러: " + error.message); // 전송 중 실패 시 알림창 뜸
+            }
         }
     </script>
 </body>
