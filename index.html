@@ -11,8 +11,7 @@
     <!-- 📌 카카오톡 등 SNS 공유용 썸네일 및 정보 (Open Graph) -->
     <meta property="og:title" content="윤기 & 예은 결혼합니다 💍">
     <meta property="og:description" content="저희 두 사람의 새로운 시작에 초대합니다.">
-    <!-- 💡 가족용 주소로 맞춤 -->
-    <meta property="og:image" content="https://yeeun-yungi.vercel.app/images/main.jpg?v=37">
+    <meta property="og:image" content="https://yeeun-yungi.vercel.app/images/main.jpg?v=38">
     <meta property="og:url" content="https://yeeun-yungi.vercel.app">
 
     <!-- 카카오톡 SDK -->
@@ -544,8 +543,6 @@
                 <!-- 신부측 계좌 -->
                 <button class="accordion-btn" style="margin-top: 10px;">신부측 계좌번호 <span class="arrow">⌄</span></button>
                 <div class="accordion-content">
-
-                    <!-- 💡 신부 아버지 계좌 삭제 완료 -->
                     
                     <!-- 신부 어머니 -->
                     <div class="account-item">
@@ -818,16 +815,16 @@
             alert(msg);
         }
 
-        // 카카오 SDK 초기화
+        // 💡 올바른 카카오 자바스크립트 키
         try {
             if (!Kakao.isInitialized()) {
-                Kakao.init('2bd5fe57f4f8829870bc8ae52de476f5'); 
+                Kakao.init('75ecc2283c096d875ba06ce0d12e1f5e'); 
             }
         } catch(e) {
             console.error("카카오 초기화 에러:", e);
         }
 
-        // 가족용 주소(yeeun-yungi)로 설정됨
+        // 가족용 주소(yeeun-yungi)
         function shareMessage() {
             if (!Kakao.isInitialized()) {
                 alert('카카오 공유 기능 설정을 확인해주세요.');
