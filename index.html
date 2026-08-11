@@ -14,6 +14,9 @@
     <!-- 💡 URL 뒤에 ?v=34 를 붙여 캐시 초기화 -->
     <meta property="og:image" content="https://yungi-yeeun.vercel.app/images/main.jpg?v=34">
     <meta property="og:url" content="https://yungi-yeeun.vercel.app">
+
+    <!-- 카카오톡 SDK -->
+    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" integrity="sha384-TiCmbV6AUn877+j-vbI80FSBavH1O7s0wYmng24r1jE0k2K5k1T1Q+X0D0B+hY2Q" crossorigin="anonymous"></script>
     
     <style>
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
@@ -23,9 +26,30 @@
         /* 하이엔드 명품 스타일의 Bodoni Moda */
         @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400&display=swap');
         
-        body { font-family: 'Pretendard', sans-serif; margin: 0; padding: 0; background-color: #f7f7f7; color: #333; text-align: center; }
+        /* 💡 [수정됨] 모바일에서 텍스트 선택, 꾹 누르기 메뉴 등 원천 차단 */
+        body { 
+            font-family: 'Pretendard', sans-serif; 
+            margin: 0; padding: 0; 
+            background-color: #f7f7f7; color: #333; 
+            text-align: center; 
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none;    /* Firefox */
+            -ms-user-select: none;     /* IE10+/Edge */
+            user-select: none;         /* Standard */
+            -webkit-touch-callout: none; /* 모바일에서 꾹 누를 때 뜨는 메뉴 차단 */
+        }
+        
         html, body { touch-action: pan-y; }
-        img, svg { user-select: none; -webkit-user-drag: none; }
+        
+        /* 💡 이미지/SVG 드래그 및 우클릭 저장 차단 */
+        img, svg { 
+            user-select: none; 
+            -webkit-user-drag: none; 
+            pointer-events: none; /* 갤러리 팝업 클릭을 제외한 일반적인 이미지 상호작용 차단 */
+        }
+        
+        /* 갤러리 이미지 클릭은 허용해야 함 */
+        .gallery img { pointer-events: auto; }
         
         /* 인트로 (초대장 열기) 화면 스타일 */
         #intro-screen {
@@ -169,7 +193,7 @@
         .calendar-table th { font-weight: 500; color: #333; font-size: 0.9em; }
         .calendar-table .sun { color: #f48b8b; } 
         
-        /* 💡 D-day 3일 동그라미 및 폭죽 애니메이션 */
+        /* D-day 3일 동그라미 및 폭죽 애니메이션 */
         .d-day-circle { 
             position: relative;
             width: 34px; height: 34px; line-height: 34px; 
@@ -177,7 +201,6 @@
             border-radius: 50%; margin: 0 auto; 
             font-weight: 600; box-shadow: 0 2px 4px rgba(0,0,0,0.15); 
         }
-        /* 💡 3일 폭죽 효과 (css box-shadow 활용) */
         .firework-sparkles {
             position: absolute;
             top: 50%; left: 50%;
@@ -298,10 +321,11 @@
             color: #555;
             cursor: pointer;
             font-family: 'Pretendard', sans-serif;
+            pointer-events: auto; /* 버튼 클릭 허용 */
         }
         .copy-btn:hover { background: #e0e0e0; }
 
-        /* 💡 전화/문자 아이콘 스타일 */
+        /* 전화/문자 아이콘 스타일 */
         .contact-btn {
             display: inline-flex;
             align-items: center;
@@ -311,8 +335,32 @@
             background: #f0f4eb;
             border-radius: 50%;
             transition: background 0.2s;
+            pointer-events: auto; /* 버튼 클릭 허용 */
         }
         .contact-btn:hover { background: #e2ead9; }
+
+        /* 카카오톡 공유 버튼 스타일 */
+        .kakao-share-btn {
+            background-color: #FEE500;
+            color: #000000;
+            border: none;
+            border-radius: 8px;
+            padding: 14px 0;
+            width: 100%;
+            max-width: 360px;
+            font-family: 'Pretendard', sans-serif;
+            font-size: 1.05em;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            transition: background-color 0.2s;
+            pointer-events: auto; /* 버튼 클릭 허용 */
+        }
+        .kakao-share-btn:hover { background-color: #e5cd00; }
 
         footer { padding: 40px; background: #fafafa; font-size: 0.8em; color: #999; }
 
@@ -416,7 +464,6 @@
                     <tbody>
                         <tr>
                             <td></td><td></td><td></td><td></td><td>1</td><td>2</td>
-                            <!-- 💡 [수정됨] 3일 동그라미 안에 폭죽(파티클) 애니메이션 추가 -->
                             <td>
                                 <div class="d-day-circle">
                                     3
@@ -511,7 +558,7 @@
                 <div style="font-size: 0.95em; color: #555; line-height: 1.6; display: flex; flex-direction: column; align-items: center; gap: 6px;">
                     <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
                         🤍 경기도 광명시 광명역로 21 동편 지하 1층
-                        <button onclick="copyToClipboard('경기도 광명시 광명역로 21', '주소가 복사되었습니다.')" style="background: transparent; border: 1px solid #d0d0d0; border-radius: 4px; padding: 3px 6px; cursor: pointer; color: #777; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.02);" title="주소 복사">
+                        <button onclick="copyToClipboard('경기도 광명시 광명역로 21', '주소가 복사되었습니다.')" style="background: transparent; border: 1px solid #d0d0d0; border-radius: 4px; padding: 3px 6px; cursor: pointer; color: #777; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.02); pointer-events: auto;" title="주소 복사">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -523,14 +570,14 @@
             </div>
             
             <div class="map-image-wrapper">
-                <a href="https://map.naver.com/v5/search/광명역 라포에트" target="_blank">
+                <a href="https://map.naver.com/v5/search/광명역 라포에트" target="_blank" style="pointer-events: auto;">
                     <img src="./images/map.jpg" alt="네이버 지도 약도" onerror="this.src='https://via.placeholder.com/480x220?text=클릭 시 네이버 지도로 이동합니다'">
                 </a>
             </div>
             <div class="map-buttons">
-                <a href="https://map.kakao.com/link/search/광명역 라포에트" target="_blank" class="map-btn">🟡 카카오맵</a>
-                <a href="tmap://search?name=광명역 라포에트" class="map-btn">🟢 티맵</a>
-                <a href="https://www.google.com/maps/search/?api=1&query=광명역+라포에트" target="_blank" class="map-btn">🔵 구글맵</a>
+                <a href="https://map.kakao.com/link/search/광명역 라포에트" target="_blank" class="map-btn" style="pointer-events: auto;">🟡 카카오맵</a>
+                <a href="tmap://search?name=광명역 라포에트" class="map-btn" style="pointer-events: auto;">🟢 티맵</a>
+                <a href="https://www.google.com/maps/search/?api=1&query=광명역+라포에트" target="_blank" class="map-btn" style="pointer-events: auto;">🔵 구글맵</a>
             </div>
 
             <div class="transport-info" style="margin-top: 70px; text-align: left; font-family: 'Gowun Batang', serif; font-size: 0.95em; color: #444; line-height: 1.8;">
@@ -545,7 +592,7 @@
                     <p style="margin: 0 0 15px 0;">
                         <b>[제1주차장] 센트럴자이 상가 주차장</b><br>
                         내비게이션: <span style="display: inline-flex; align-items: center; gap: 6px;">경기도 광명시 광명역로 28
-                            <button onclick="copyToClipboard('경기도 광명시 광명역로 28', '주소가 복사되었습니다.')" style="background: transparent; border: 1px solid #d0d0d0; border-radius: 4px; padding: 3px 5px; cursor: pointer; color: #777; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.02);" title="주소 복사">
+                            <button onclick="copyToClipboard('경기도 광명시 광명역로 28', '주소가 복사되었습니다.')" style="background: transparent; border: 1px solid #d0d0d0; border-radius: 4px; padding: 3px 5px; cursor: pointer; color: #777; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.02); pointer-events: auto;" title="주소 복사">
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -557,7 +604,7 @@
                     <p style="margin: 0 0 15px 0;">
                         <b>[제2주차장] 파크자이 상가 주차장</b><br>
                         내비게이션: <span style="display: inline-flex; align-items: center; gap: 6px;">경기도 광명시 광명역로 26
-                            <button onclick="copyToClipboard('경기도 광명시 광명역로 26', '주소가 복사되었습니다.')" style="background: transparent; border: 1px solid #d0d0d0; border-radius: 4px; padding: 3px 5px; cursor: pointer; color: #777; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.02);" title="주소 복사">
+                            <button onclick="copyToClipboard('경기도 광명시 광명역로 26', '주소가 복사되었습니다.')" style="background: transparent; border: 1px solid #d0d0d0; border-radius: 4px; padding: 3px 5px; cursor: pointer; color: #777; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.02); pointer-events: auto;" title="주소 복사">
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -598,7 +645,7 @@
         </section>
 
         <!-- 마음 전하실 곳 -->
-        <section style="border-bottom: none; padding-bottom: 80px;">
+        <section style="border-bottom: none; padding-bottom: 60px;">
             <svg class="flower-icon" style="width: 35px; margin-bottom: 10px;" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
                 <path d="M50,110 Q45,80 50,55" stroke="#92a878" stroke-width="1.8" fill="none" stroke-linecap="round"/>
                 <path d="M50,85 Q65,75 60,65 Q55,60 50,75" stroke="#92a878" stroke-width="1.5" fill="none" stroke-linecap="round"/>
@@ -623,8 +670,6 @@
                     <div class="account-item">
                         <div class="acc-info">
                             <span class="acc-bank">국민</span> <span class="acc-num">60350104148904</span>
-                            
-                            <!-- 💡 [수정됨] 신랑 전화번호 반영 -->
                             <div class="acc-name" style="display: flex; align-items: center; margin-top: 4px;">
                                 <span style="margin-right: 8px;">박윤기</span>
                                 <a href="tel:01099429941" class="contact-btn" title="전화하기" style="margin-right: 4px;">
@@ -634,7 +679,6 @@
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#92a878" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                                 </a>
                             </div>
-
                         </div>
                         <button class="copy-btn" onclick="copyToClipboard('60350104148904', '계좌번호가 복사되었습니다.')">복사</button>
                     </div>
@@ -646,8 +690,6 @@
                     <div class="account-item">
                         <div class="acc-info">
                             <span class="acc-bank">카카오</span> <span class="acc-num">3333158606350</span>
-                            
-                            <!-- 💡 [수정됨] 신부 전화번호 반영 -->
                             <div class="acc-name" style="display: flex; align-items: center; margin-top: 4px;">
                                 <span style="margin-right: 8px;">신예은</span>
                                 <a href="tel:01020414216" class="contact-btn" title="전화하기" style="margin-right: 4px;">
@@ -657,18 +699,25 @@
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#92a878" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                                 </a>
                             </div>
-
                         </div>
                         <button class="copy-btn" onclick="copyToClipboard('3333158606350', '계좌번호가 복사되었습니다.')">복사</button>
                     </div>
                 </div>
             </div>
 
-            <!-- 화환 사양 문구 -->
             <div style="margin-top: 30px; padding: 15px 10px; background-color: #fafafa; border-radius: 8px; border: 1px solid #eaeaea; font-family: 'Gowun Batang', serif; font-size: 0.95em; color: #666; line-height: 1.6;">
                 보내주시는 <b>화환</b>은 감사한 마음으로 정중히 사양하고자 합니다. 귀한 걸음으로 함께 축복해 주시면 더없이 감사하겠습니다.
             </div>
+        </section>
 
+        <!-- 카카오톡 공유하기 버튼 영역 -->
+        <section style="border-top: 1px solid #f0f0f0; border-bottom: none; padding-top: 40px; padding-bottom: 60px;">
+            <button class="kakao-share-btn" onclick="shareMessage()">
+                <svg viewBox="0 0 100 100" style="width: 22px; height: 22px; margin-right: 8px; fill: #000;">
+                    <path d="M50,15 C25.147,15 5,31.238 5,51.26 C5,64.218 14.12,75.584 27.534,81.826 L23.504,96.538 C23.238,97.512 24.364,98.243 25.187,97.625 L42.61,84.536 C45.006,84.887 47.472,85.074 50,85.074 C74.853,85.074 95,68.835 95,48.814 C95,28.793 74.853,15 50,15 Z"></path>
+                </svg>
+                카카오톡으로 청첩장 보내기
+            </button>
         </section>
         
         <footer>
@@ -687,7 +736,12 @@
 
     <!-- 기능 제어 자바스크립트 -->
     <script>
-        // 모바일 브라우저 확대 방지 스크립트
+        // 💡 [추가] 모바일 기기에서의 텍스트 길게 누르기(선택) 방지
+        document.body.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // 💡 [수정] 모바일 브라우저 확대 방지 및 핀치 줌 방지 로직 개선
         document.addEventListener('touchstart', function(event) {
             if (event.touches.length > 1) { 
                 event.preventDefault();
@@ -709,20 +763,22 @@
         const bgmToggleBtn = document.getElementById('new-bgm-toggle');
         let isPlaying = false; 
 
-        introScreen.addEventListener('click', function() {
-            this.style.opacity = '0';
-            setTimeout(() => { this.style.display = 'none'; }, 800);
-            
-            if (!isPlaying) {
-                let playPromise = bgmAudio.play();
-                if (playPromise !== undefined) {
-                    playPromise.then(() => {
-                        isPlaying = true;
-                        bgmToggleBtn.classList.add('playing');
-                    }).catch(error => { console.log("자동 재생 보류됨"); });
+        if (introScreen) {
+            introScreen.addEventListener('click', function() {
+                this.style.opacity = '0';
+                setTimeout(() => { this.style.display = 'none'; }, 800);
+                
+                if (!isPlaying && bgmAudio) {
+                    let playPromise = bgmAudio.play();
+                    if (playPromise !== undefined) {
+                        playPromise.then(() => {
+                            isPlaying = true;
+                            if (bgmToggleBtn) bgmToggleBtn.classList.add('playing');
+                        }).catch(error => { console.log("자동 재생 보류됨"); });
+                    }
                 }
-            }
-        });
+            });
+        }
 
         // 타이핑 애니메이션
         const nameText = "Yungi & Yeeun";
@@ -785,17 +841,19 @@
         }
 
         // BGM 이퀄라이저 컨트롤 기능
-        bgmToggleBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            if (isPlaying) {
-                bgmAudio.pause();
-                bgmToggleBtn.classList.remove('playing');
-            } else {
-                bgmAudio.play();
-                bgmToggleBtn.classList.add('playing');
-            }
-            isPlaying = !isPlaying;
-        });
+        if (bgmToggleBtn && bgmAudio) {
+            bgmToggleBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (isPlaying) {
+                    bgmAudio.pause();
+                    bgmToggleBtn.classList.remove('playing');
+                } else {
+                    bgmAudio.play();
+                    bgmToggleBtn.classList.add('playing');
+                }
+                isPlaying = !isPlaying;
+            });
+        }
 
         // 사진 확대
         const lightbox = document.getElementById('lightbox');
@@ -818,16 +876,9 @@
             lightboxImg.src = galleryImages[currentImgIndex].src;
         }
         function closeLightbox() { lightbox.style.display = 'none'; }
-        lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
-
-        // 불펌 방지
-        document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
-        document.addEventListener('selectstart', function(e) { e.preventDefault(); });
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'PrintScreen' || e.keyCode === 44) { alert("사진 캡처가 제한되어 있습니다."); e.preventDefault(); }
-            if (e.ctrlKey && (e.key === 'p' || e.key === 'P')) { e.preventDefault(); }
-            if (e.metaKey && e.shiftKey) { e.preventDefault(); }
-        });
+        if (lightbox) {
+            lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+        }
 
         // 카운트다운 타이머
         const weddingDate = new Date("2026-10-03T16:10:00").getTime();
@@ -836,6 +887,8 @@
             const timeDiff = weddingDate - now;
             const dDayTextEl = document.getElementById('d-day-text');
             const countdownBox = document.getElementById('countdown-box');
+
+            if (!dDayTextEl) return;
 
             if (timeDiff > 0) {
                 document.getElementById('d-days').innerText = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
@@ -857,7 +910,8 @@
         const dateObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => { entry.isIntersecting ? entry.target.classList.add('active') : entry.target.classList.remove('active'); });
         }, observerOptions);
-        dateObserver.observe(document.getElementById('large-date-section'));
+        const sectionEl = document.getElementById('large-date-section');
+        if (sectionEl) dateObserver.observe(sectionEl);
 
         const flowerObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -866,7 +920,8 @@
                 }
             });
         }, { threshold: 0.2 }); 
-        flowerObserver.observe(document.getElementById('flower-anim'));
+        const flowerEl = document.getElementById('flower-anim');
+        if (flowerEl) flowerObserver.observe(flowerEl);
 
         // 아코디언 토글 기능
         const accBtns = document.querySelectorAll('.accordion-btn');
@@ -882,7 +937,7 @@
             });
         });
 
-        // 💡 계좌번호 및 주소 복사 기능 (개선됨)
+        // 계좌번호 및 주소 복사 기능
         function copyToClipboard(val, msg) {
             const t = document.createElement("textarea");
             document.body.appendChild(t);
@@ -891,6 +946,43 @@
             document.execCommand('copy');
             document.body.removeChild(t);
             alert(msg);
+        }
+
+        // 카카오 SDK 초기화
+        try {
+            if (!Kakao.isInitialized()) {
+                Kakao.init('2bd5fe57f4f8829870bc8ae52de476f5'); 
+            }
+        } catch(e) {
+            console.error("카카오 초기화 에러:", e);
+        }
+
+        function shareMessage() {
+            if (!Kakao.isInitialized()) {
+                alert('카카오 공유 기능 설정을 확인해주세요.');
+                return;
+            }
+            Kakao.Share.sendDefault({
+                objectType: 'feed',
+                content: {
+                    title: '윤기 & 예은 결혼합니다 💍',
+                    description: '저희 두 사람의 새로운 시작에 초대합니다.\n2026년 10월 3일 토요일 오후 4시 10분',
+                    imageUrl: 'https://yungi-yeeun.vercel.app/images/main.jpg',
+                    link: {
+                        mobileWebUrl: 'https://yungi-yeeun.vercel.app',
+                        webUrl: 'https://yungi-yeeun.vercel.app',
+                    },
+                },
+                buttons: [
+                    {
+                        title: '모바일 청첩장 보기',
+                        link: {
+                            mobileWebUrl: 'https://yungi-yeeun.vercel.app',
+                            webUrl: 'https://yungi-yeeun.vercel.app',
+                        },
+                    },
+                ],
+            });
         }
 
     </script>
