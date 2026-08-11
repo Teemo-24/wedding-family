@@ -12,7 +12,7 @@
     <meta property="og:title" content="윤기 & 예은 결혼합니다 💍">
     <meta property="og:description" content="저희 두 사람의 새로운 시작에 초대합니다.">
     <!-- 💡 가족용 주소로 맞춤 -->
-    <meta property="og:image" content="https://yeeun-yungi.vercel.app/images/main.jpg?v=36">
+    <meta property="og:image" content="https://yeeun-yungi.vercel.app/images/main.jpg?v=37">
     <meta property="og:url" content="https://yeeun-yungi.vercel.app">
 
     <!-- 카카오톡 SDK -->
@@ -411,7 +411,7 @@
 
             <div class="transport-info" style="margin-top: 70px; text-align: left; font-family: 'Gowun Batang', serif; font-size: 0.95em; color: #444; line-height: 1.8;">
                 
-                <!-- 💡 [신규 추가] KTX 단체석 안내 영역 -->
+                <!-- KTX 단체석 안내 영역 -->
                 <div style="margin-bottom: 45px;">
                     <h3 style="font-size: 1.1em; color: #92a878; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px;">🚆 KTX 대절 (단체석) 안내</h3>
                     <p style="margin: 0 0 10px 0; font-size: 0.95em; line-height: 1.6;">
@@ -499,7 +499,7 @@
                 모두 소중히 간직하겠습니다.
             </div>
 
-            <!-- 💡 [수정됨] 가족용 - 부모님 계좌 추가 -->
+            <!-- 가족용 - 부모님 계좌 포함 -->
             <div class="account-wrap">
                 <!-- 신랑측 계좌 -->
                 <button class="accordion-btn">신랑측 계좌번호 <span class="arrow">⌄</span></button>
@@ -544,16 +544,9 @@
                 <!-- 신부측 계좌 -->
                 <button class="accordion-btn" style="margin-top: 10px;">신부측 계좌번호 <span class="arrow">⌄</span></button>
                 <div class="accordion-content">
-                    
-                    <!-- 신부 아버지 -->
-                    <div class="account-item">
-                        <div class="acc-info">
-                            <span class="acc-bank">신한</span> <span class="acc-num">110484402863</span>
-                            <div class="acc-name" style="margin-top: 4px; color: #888;">예금주: 신동현 (아버지)</div>
-                        </div>
-                        <button class="copy-btn" onclick="copyToClipboard('110484402863', '계좌번호가 복사되었습니다.')">복사</button>
-                    </div>
 
+                    <!-- 💡 신부 아버지 계좌 삭제 완료 -->
+                    
                     <!-- 신부 어머니 -->
                     <div class="account-item">
                         <div class="acc-info">
@@ -834,7 +827,7 @@
             console.error("카카오 초기화 에러:", e);
         }
 
-        // 💡 가족용 주소(yeeun-yungi)로 설정됨
+        // 가족용 주소(yeeun-yungi)로 설정됨
         function shareMessage() {
             if (!Kakao.isInitialized()) {
                 alert('카카오 공유 기능 설정을 확인해주세요.');
